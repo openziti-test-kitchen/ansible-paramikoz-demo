@@ -1,5 +1,9 @@
 __pycache__/
 secrets/identities/*
 !secrets/identities/.gitkeep
+secrets/ssh/*
+!secrets/ssh/.gitkeep
+secrets/sshd/*
+!secrets/sshd/.gitkeep
 secrets/tokens/*
 !secrets/tokens/.gitkeep

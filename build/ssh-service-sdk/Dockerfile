@@ -18,10 +18,6 @@ RUN adduser --disabled-password --gecos '' ${SSHD_USER} \
 && echo "%${SSHD_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
 && install -d -m 0700 -o ${SSHD_USER} -g ${SSHD_USER} /home/${SSHD_USER}/.ssh
 
-COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} ${DOCKER_BUILD_DIR}/secrets/sshd/host_key_file.key .
-COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/ssh/ziggy_id_rsa.pub /home/${SSHD_USER}/.ssh/authorized_keys
-COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/ssh/ziggy_id_rsa /home/${SSHD_USER}/.ssh/id_rsa
-
 USER $SSHD_USER
 
 ENV PATH="/home/${SSHD_USER}/.local/bin:${PATH}"
@@ -32,6 +28,9 @@ RUN python -m pip install --no-cache-dir --user -r requirements.txt
 
 COPY ${DOCKER_BUILD_DIR}/src/ .
 
+COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/ssh/ziggy_id_rsa.pub /home/${SSHD_USER}/.ssh/authorized_keys
+COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/ssh/ziggy_id_rsa /home/${SSHD_USER}/.ssh/id_rsa
+COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/sshd/host_key_file.key .
 COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/identities/ssh_server_2.json .
 
 CMD ["/bin/bash", "-c", "exec python paramikoz_sshd.py -k $SSHD_HOST_KEY_FILE -l $SSHD_LOG_LEVEL -i $ZITI_IDENTITY_FILE -s $ZITI_SERVICE"]
