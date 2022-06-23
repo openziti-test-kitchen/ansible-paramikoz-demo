@@ -1,0 +1,5 @@
+{
+  "port": 22,
+  "address": "openssh-server",
+  "protocol": "tcp"
+}

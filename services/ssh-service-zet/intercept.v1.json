@@ -1,0 +1,14 @@
+{
+  "addresses": [
+    "ansibletarget1.ziti"
+  ],
+  "protocols": [
+    "tcp"
+  ],
+  "portRanges": [
+    {
+      "low": 22,
+      "high": 22
+    }
+  ]
+}
