@@ -1,0 +1,60 @@
+---
+version: "3"
+
+services:
+
+  ssh-service-zet:
+    build:
+      context: .
+      dockerfile: build/ssh-service-zet/Dockerfile
+      args:
+        TUNNEL_VERSION: nomount
+    image: ssh-service-zet:dev
+    privileged: false
+    restart: unless-stopped
+    environment:
+      - FXLOG_NO_JSON=true
+      - NF_REG_NAME=ssh_server_1
+    networks:
+      - ssh-service-zet
+    command: ["run-host", "--verbose=4"]
+
+  openssh-server:
+    build:
+      context: .
+      dockerfile: build/openssh-server/Dockerfile
+    image: openssh-server:dev
+    privileged: false
+    restart: unless-stopped
+    networks:
+      - ssh-service-zet
+
+  ssh-service-sdk:
+    build:
+      context: .
+      dockerfile: build/ssh-service-sdk/Dockerfile
+      args:
+        DOCKER_BUILD_DIR: build/ssh-service-sdk
+        PYTHON_VERSION: latest
+        SSHD_USER: ziggy
+    image: ssh-service-sdk:dev
+    privileged: false
+    restart: unless-stopped
+    networks:
+      - ssh-service-sdk
+    environment:
+      - SSHD_HOST_KEY_FILE=host_key_file.key
+      - SSHD_LOG_LEVEL=DEBUG
+      - ZITI_IDENTITY_FILE=ssh_server_2.json
+      - ZITI_LOG=3
+      - ZITI_SERVICE=ssh-service-sdk
+
+networks:
+  ssh-service-zet:
+    driver: bridge
+    external: false
+
+  ssh-service-sdk:
+    driver: bridge
+    external: false
+...

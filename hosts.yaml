@@ -1,0 +1,10 @@
+---
+ssh_servers:
+  hosts:
+    ansibletarget1.ziti:
+    ansibletarget2.ziti:
+  vars:
+    ansible_connection: paramikoz
+    ansible_user: ziggy
+    ansible_ssh_private_key_file: ./secrets/ssh/ziggy_id_rsa
+...

@@ -1,0 +1,10 @@
+.dockerignore
+README.md
+ansible.cfg
+diagrams
+docker-compose.yaml
+hosts.yaml
+paramiko.py
+requirements.txt
+run.sh
+**/.gitkeep
