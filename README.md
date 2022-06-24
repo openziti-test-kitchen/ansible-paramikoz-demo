@@ -24,7 +24,7 @@ What is this, you ask?
 
 1. An Ansible client
 2. A pair of Ziti Edge Developer Sandbox (ZEDS) apps
-3. A docker-compose stack of a pair of SSH servers, one for each of the aforementioned apps
+3. A corresponding pair of SSH servers running in Docker
 
 Now let's gather some supplies for this brief journey...
 
@@ -32,9 +32,10 @@ Now let's gather some supplies for this brief journey...
 
 1. Python
 2. OpenZiti Python SDK
-3. Docker Engine (or Podman Socket)
+3. Docker Engine
+    * Alternatively, a Podman Socket
     * Player's choice on rootful vs rootless, both work
-4. docker-compose (or podman-compose integration)
+4. docker-compose
 5. Ansible CLI
 
 There is a `requirements.txt` file at the root of the project. It will install `ansible` and the `openziti` PyPI modules.
