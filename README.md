@@ -75,7 +75,7 @@ The `ssh-service-zet` service (running <code>**z**iti-**e**dge-**t**unnel</code>
 
 As you step through the video, feel free to use the copy bottons below on the JSON configs to save you from typing, and to ensure a consistent experience.
 
-You tour begins with ZEDS! *Hint: ctrl-click or cmd-click to open a link in a new tab*
+Your tour begins with ZEDS! *Hint: ctrl-click or cmd-click to open a link in a new tab*
 
 Link to ZEDS: https://zeds.openziti.org/
 
