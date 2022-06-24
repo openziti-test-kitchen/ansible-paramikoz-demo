@@ -4,6 +4,6 @@ from ansible.plugins.connection.paramiko_ssh import \
 
 
 class ModuleDocFragment():
-    "Base Paramiko Documentation"
+    """Base Paramiko Documentation"""
     # pylint: disable=too-few-public-methods
     DOCUMENTATION = PARAMIKO_DOCUMENTATION
