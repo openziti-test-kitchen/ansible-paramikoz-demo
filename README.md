@@ -1,12 +1,10 @@
 # Zero Trust Ansible Demo
 
-Why this demo?
+But...why?
 
 > *Seeing is believing, but feeling is the truth.* -Thomas Fuller
 
-Sometimes, you must touch it to get a sense of the thing.
-
-But...why? Isn't SSH secure enough?
+Isn't SSH secure enough?
 
 Ansible is widely deployed and likely used within your organization. Most deployments (not yours, of course) are insecure. More often than not, we defend our precious SSHD servers by limiting their use to the walled garden of the firewall, where the server can listen on its port happily if not naively. Sadly, sometimes we see this scenario when the host is publicly exposed, often relying completely on a single layer of security e.g. a password or key pair. To make matters worse, many deployments leverage a service user with shared credentials per environment. Sometimes, they invoke Ansible from a centralized server, and sometimes that user has password-less sudo. What could possibly go wrong?
 
