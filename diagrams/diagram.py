@@ -17,9 +17,12 @@ cluster_attr = {
 }
 
 with Diagram("Zero Trust Ansible", graph_attr=graph_attr):
-    with Cluster("ssh_client_1", graph_attr=cluster_attr):
+    with Cluster("ssh_client_{1,2}", graph_attr=cluster_attr):
         ansible_client = Ansible("ParamikoZ")
-    zeds = Custom("", "./assets/ZEDS.png", height="4", width="6", imagescale="false")
+    zeds = Custom(
+        "", "./assets/ZEDS.png",
+        height="4", width="6", imagescale="false"
+    )
 
     with Cluster(""):
         docker = Docker()
