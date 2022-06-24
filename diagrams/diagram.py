@@ -4,7 +4,6 @@
 from diagrams import Cluster, Diagram, Edge
 from diagrams.custom import Custom
 from diagrams.onprem.container import Docker
-from diagrams.onprem.iac import Ansible
 
 graph_attr = {
     "fontname": "Open Sans",
@@ -18,7 +17,7 @@ cluster_attr = {
 
 with Diagram("Zero Trust Ansible", graph_attr=graph_attr):
     with Cluster("ssh_client_{1,2}", graph_attr=cluster_attr):
-        ansible_client = Ansible("ParamikoZ")
+        ansible_client = Custom("ParamikoZ", "./assets/paramikoz.png")
     zeds = Custom(
         "", "./assets/ZEDS.png",
         height="4", width="6", imagescale="false"
