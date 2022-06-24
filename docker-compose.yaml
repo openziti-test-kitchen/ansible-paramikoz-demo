@@ -47,7 +47,7 @@ services:
       - SSHD_LOG_LEVEL=DEBUG
       - ZITI_IDENTITY_FILE=ssh_server_2.json
       - ZITI_LOG=3
-      - ZITI_SERVICE=ssh-service-sdk
+      - ZITI_SDK_SERVICE=${ZITI_SDK_SERVICE}
 
 networks:
   ssh-service-zet:

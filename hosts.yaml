@@ -2,7 +2,11 @@
 ssh_servers:
   hosts:
     ansibletarget1.ziti:
+      ziti_identities:
+        - ./secrets/identities/ssh_client_1.json
     ansibletarget2.ziti:
+      ziti_identities:
+        - ./secrets/identities/ssh_client_2.json
   vars:
     ansible_connection: paramikoz
     ansible_user: ziggy

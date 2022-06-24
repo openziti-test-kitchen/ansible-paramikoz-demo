@@ -68,6 +68,10 @@ def start_server(keyfile, identity, service):
         srv_sock = ztx.bind(service, sock=sock)
     except Exception as err:
         logger.fatal("Error creating or binding socket: %s", str(err))
+        logger.fatal(
+            "keyfile: %s, identity: %s, service: %s",
+            keyfile, identity, service
+        )
         traceback.print_exc()
         sys.exit(1)
 

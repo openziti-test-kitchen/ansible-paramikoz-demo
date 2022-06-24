@@ -33,4 +33,4 @@ COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/ssh/ziggy_id_rsa /hom
 COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/sshd/host_key_file.key .
 COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/identities/ssh_server_2.json .
 
-CMD ["/bin/bash", "-c", "exec python paramikoz_sshd.py -k $SSHD_HOST_KEY_FILE -l $SSHD_LOG_LEVEL -i $ZITI_IDENTITY_FILE -s $ZITI_SERVICE"]
+CMD ["/bin/bash", "-c", "exec python paramikoz_sshd.py -k ${SSHD_HOST_KEY_FILE} -l ${SSHD_LOG_LEVEL} -i ${ZITI_IDENTITY_FILE} -s \"${ZITI_SDK_SERVICE}\""]

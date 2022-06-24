@@ -2,8 +2,11 @@
 set -o nounset
 set -x
 
+: "${ZITI_SDK_SERVICE:?Variable empty or unset}"
+
 declare -a REQUIRED_JWTS=(
     "ssh_client_1"
+    "ssh_client_2"
     "ssh_server_1"
     "ssh_server_2"
 )
