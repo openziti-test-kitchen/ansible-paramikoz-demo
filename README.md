@@ -48,13 +48,13 @@ pip install --user -r requirements.txt
 
 Before going any further, be aware this explainer is accompanied by a `setup.sh` script and video that will step through the procedure. Still, it's important to get some footing before jumping off the deep end.
 
-We are going to deploy some non-privileged SSH servers locally, sandboxed away in containers. One of them, will be behind our `ziti-edge-tunnel` software container in a shared network. This tunneller will act as an agent for the vanilla OpenSSH sshd. In the other container is a custom, Paramiko-based ssh server that has been "zitified" with our brand new `python-sdk-py` (PyPi `openziti`). Importantly, these SSH server containers **don't listen on any public interface, don't have any special Linux Capabilities (permissions), and have NO ports mapped to them**. 
+We are going to deploy some non-privileged SSH servers locally, sandboxed away in containers. One of them, will be behind our `ziti-edge-tunnel` software container in a shared network. This tunneller will act as an agent for the vanilla OpenSSH sshd. In the other container is a custom, Paramiko-based ssh server that has been "Zitified" with our brand new `python-sdk-py` (PyPi `openziti`). Importantly, these SSH server containers **don't listen on any public interface, don't have any special Linux Capabilities (permissions), and have NO ports mapped to them**. 
 
 The only way to reach the SSH servers is via the OpenZiti App Network we'll create.
 
-For that, we're going to use the Ziti Edge Developer Sandbox (ZEDS). It allows us to set up OpenZiti networks for development purposes like this demo, but without having to worry about all the underlying ziti components (like the ziti-controller, ziti-router(s), policies, etc...). Don't worry, we'll show you how and give you everything you need below via a short video and some configs you can copy and paste.
+For that, we're going to use the Ziti Edge Developer Sandbox (ZEDS). It allows us to set up OpenZiti networks for development purposes like this demo, but without having to worry about all the underlying OpenZiti components (like the `ziti-controller`, `ziti-router`, service policies, etc.). Don't worry, we'll show you how and give you everything you need below via a short video and some configs you can copy and paste.
 
-Finally, we want to do some work with Ansible. That's were our ParamikoZ connection plugin comes in. Right now, it's less than 60 LOC; yet, fully integrated with Ansible's configuration hooks, and allows you to connect (using a ziti identity) to your services. Using this plugin, we supercharge Ansible, by conferring it he powers to find the ZEDS defined service intercept addresses, which are only reachable via the OpenZiti overlay, and which will be hosted on those dark containers. Lastly, we have some eastereggs, so stick around.
+Finally, we want to do some work with Ansible. That's where our ParamikoZ connection plugin comes in which happens to be less than 60 LOC, is fully integrated with Ansible's configuration hooks, and allows you to connect with an OpenZiti Identity to your Compose services, the SSH servers. This connection plugin supercharges Ansible by conferring the power to find an OpenZiti Service by matching the inventory hostname to a configured service address. Lastly, we have some easter eggs.
 
 ## Into the Wild
 
@@ -62,15 +62,15 @@ Let's get familiar with ZEDS.
 
 The video below steps through the UI to show you how this is done. **It is important that you follow the naming conventions shown in the video verbatim, as we will rely on them in the `setup.sh` script**
 
-We're going to create two ZEDS "apps". For our pursposes here, you can think of "apps" as independent OpenZiti overlay networks. ZEDS does the heavy lifting for you, taking away the need to set up your own network.
+We're going to create two ZEDS "apps". You can think of "apps" as independent OpenZiti Networks. ZEDS does the heavy lifting for you by hosting the OpenZiti Network and global fabric.
 
-For each of these apps, we will provision a client identity and a server identity, each one being a JWT token. The client identity will be used for the Ansible paramikoz plugin, and the server identity will be used for the ziti component of the ssh server running in the container.
+For each of these apps, we will provision a client identity and a server identity. You'll download a one-time JWT enrollment token for each identity. The client identity will be used for the Ansible paramikoz plugin, and the server identity will be used for the OpenZiti component of the ssh server running in the container.
 
-Then we will create a service definition for each app. These service definitions provide the Ansible hostnames, via a config type called `intercept.v1`, which provides a hostname resolution mechanism for the ParamikoZ plugin.
+Next we will create a service definition for each app. These service definitions provide the Ansible inventory hostnames via a config type called `intercept.v1`. This will provide the hostname resolution mechanism for the ParamikoZ connection plugin for Ansible.
 
-The `ssh-service-zet` (**z**iti-**e**dge-**t**unnel) will also have a `host.v1` configuration, which the tunnel will use to off-board data from the overlay network. The `ssh-service-sdk` does not need this because the overlay terminates **directly** in the code.
+The `ssh-service-zet` (<code>**z**iti-**e**dge-**t**unnel</code>) will also have a `host.v1` configuration, which the tunnel will use to off-board data from the overlay network. The `ssh-service-sdk` does not need this because the overlay delivers your SSH connection **directly** into the ParamikoZ SSH server application. No agent needed!
 
-As you step through the video, feel free to use the copy bottons below on the json configs to save you from typing, and to ensure a consistent experience.
+As you step through the video, feel free to use the copy bottons below on the JSON configs to save you from typing, and to ensure a consistent experience.
 
 [video]
 
@@ -128,12 +128,14 @@ intercept.v1
 
 ## Showtime
 
-If you've followed the steps in the videos, you should now have 4 JWT tokens in your downloads folder.
+If you've followed the steps in the videos you now have 4 one-time JWT enrollment tokens downloaded.
 
-* ssh_client_{1,2}.jwt
-* ssh_server_{1,2}.jwt
+1. `ssh_client_1.jwt`
+1. `ssh_client_2.jwt`
+1. `ssh_server_1.jwt`
+1. `ssh_server_2.jwt`
 
-You should also have copied the fully qualified service name of the `ssh-service-sdk` service into your clipboard.
+You should also have copied the fully qualified service name of the `ssh-service-sdk` service into your clipboard by clicking the clipboard button in the service editor screen.
 
 Before running the `setup.sh`, please follow these steps:
 
@@ -143,7 +145,7 @@ cp ~/Downloads/ssh_{client,server}_?.jwt secrets/tokens/
 ```
 
 ```bash
-# Export your SDK app service name
+# Export your SDK app service name by pasting from your clipboard the value from the service editor screen (click the clipboard button to copy)
 export ZITI_SDK_SERVICE="[my_app_name] ssh-service-sdk [my_base64_string]"
 ```
 
@@ -190,7 +192,7 @@ So, what's going on here?
 
 Each time a connection is made to the defined `intercept.v1` addresses, the `ParamikoZ` connection plugin rewrites the request at runtime, and sends it on it's way over the overlay. You are accessing your remote SSH servers **over** OpenZiti. Remember, there are *no ports* open on the containers; they are sandboxed away and you can't reach them yourself over your local network.
 
- The ziti components in those containers are establishing duplexed connections outbound to the ziti network.  
+ The OpenZiti components in those containers are establishing duplexed connections outbound to the OpenZiti Network.  
 
 If you provide your own server using one of our SDKs, you can also do some more fun things:
 
