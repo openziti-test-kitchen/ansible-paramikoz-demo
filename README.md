@@ -12,7 +12,7 @@ Enter ParamikoZ, Python SSH with built-in OpenZiti!
 
 "If we cannot pass over the mountain, let us go under it" - Gimli son of Gloin
 
-## The bird's eye view
+## The Bird's Eye View
 
 So, we are basically going to make this:
 
@@ -74,7 +74,7 @@ As you step through the video, feel free to use the copy bottons below on the js
 
 [video]
 
-### ssh-service-zet
+### `ssh-service-zet`
 
 intercept.v1
 
@@ -105,7 +105,7 @@ host.v1
 }
 ```
 
-### ssh-service-sdk
+### `ssh-service-sdk`
 
 intercept.v1
 
@@ -201,7 +201,7 @@ If you provide your own server using one of our SDKs, you can also do some more 
 ansible "all" -m raw -a "ziggywave"
 ```
 
-### The end
+### The End
 
 All good things do come to an end. When you're ready, just run:
 
