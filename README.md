@@ -75,7 +75,8 @@ The `ssh-service-zet` service (running <code>**z**iti-**e**dge-**t**unnel</code>
 
 As you step through the video, feel free to use the copy bottons below on the JSON configs to save you from typing, and to ensure a consistent experience.
 
-[video]
+[![Zero Trust Ansible with ParamikoZ](https://img.youtube.com/vi/0WS9-9fvMLY/0.jpg)](https://www.youtube.com/watch?v=0WS9-9fvMLY)
+
 
 ### `ssh-service-zet`
 
