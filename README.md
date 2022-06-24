@@ -18,20 +18,20 @@ Enter ParamikoZ, Python SSH with built-in OpenZiti!
 
 What is this, you ask?
 
-1) An Ansible client
-2) A pair of Ziti Edge Developer Sandbox (ZEDS) apps
-3) A docker-compose stack of a pair of SSH servers, one for each of the aforementioned apps
+1. An Ansible client
+2. A pair of Ziti Edge Developer Sandbox (ZEDS) apps
+3. A docker-compose stack of a pair of SSH servers, one for each of the aforementioned apps
 
 Now let's gather some supplies for this brief journey...
 
 ### Requirements
 
 1. Python
-1. OpenZiti Python SDK
-1. Docker Engine (or Podman Socket)
+2. OpenZiti Python SDK
+3. Docker Engine (or Podman Socket)
     * Player's choice on rootful vs rootless, both work
-1. docker-compose (or podman-compose integration)
-1. Ansible CLI
+4. docker-compose (or podman-compose integration)
+5. Ansible CLI
 
 There is a `requirements.txt` file at the root of the project. It will install `ansible` and the `openziti` PyPI modules.
 
@@ -129,9 +129,9 @@ intercept.v1
 If you've followed the steps in the videos you now have 4 one-time JWT enrollment tokens downloaded.
 
 1. `ssh_client_1.jwt`
-1. `ssh_client_2.jwt`
-1. `ssh_server_1.jwt`
-1. `ssh_server_2.jwt`
+2. `ssh_client_2.jwt`
+3. `ssh_server_1.jwt`
+4. `ssh_server_2.jwt`
 
 You should also have copied the fully qualified service name of the `ssh-service-sdk` service into your clipboard by clicking the clipboard button in the service editor screen.
 
