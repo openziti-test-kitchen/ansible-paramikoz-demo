@@ -70,7 +70,7 @@ For each of these apps, we will provision a client identity and a server identit
 
 Next we will create a service definition for each app. These service definitions provide the Ansible inventory hostnames via a config type called `intercept.v1`. This will provide the hostname resolution mechanism for the ParamikoZ connection plugin for Ansible.
 
-The `ssh-service-zet` (<code>**z**iti-**e**dge-**t**unnel</code>) will also have a `host.v1` configuration, which the tunnel will use to off-board data from the overlay network. The `ssh-service-sdk` does not need this because the overlay delivers your SSH connection **directly** into the ParamikoZ SSH server application. No agent needed!
+The `ssh-service-zet` service (running <code>**z**iti-**e**dge-**t**unnel</code> as an agent) will also have a `host.v1` configuration, which the tunnel will use to off-board data from the overlay network. The `ssh-service-sdk` does not need this because the overlay delivers your SSH connection **directly** into the ParamikoZ SSH server application. No agent needed!
 
 As you step through the video, feel free to use the copy bottons below on the JSON configs to save you from typing, and to ensure a consistent experience.
 
@@ -147,7 +147,7 @@ cp ~/Downloads/ssh_{client,server}_?.jwt secrets/tokens/
 ```
 
 ```bash
-# Export your SDK app service name by pasting from your clipboard the value from the service editor screen (click the clipboard button to copy)
+# Export your SDK app service name from step above
 export ZITI_SDK_SERVICE="[my_app_name] ssh-service-sdk [my_base64_string]"
 ```
 
