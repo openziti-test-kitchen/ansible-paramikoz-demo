@@ -51,7 +51,7 @@ pip install --user -r requirements.txt
 
 Before going any further, be aware this explainer is accompanied by a `setup.sh` script and video that will step through the procedure. Still, it's important to get some footing before jumping off the deep end.
 
-We are going to deploy some non-privileged SSH servers locally, sandboxed away in containers. One of them, will be behind our `ziti-edge-tunnel` software container in a shared network. This tunneller will act as an agent for the vanilla OpenSSH sshd. In the other container is a custom, Paramiko-based ssh server that has been "Zitified" with our brand new `python-sdk-py` (PyPi `openziti`). Importantly, these SSH server containers **don't listen on any public interface, don't have any special Linux Capabilities, and have NO ports mapped to them**.
+We are going to deploy some non-privileged SSH servers locally, sandboxed away in containers. One of them, will be behind our `ziti-edge-tunnel` software container in a shared network. This tunneller will act as an agent for the vanilla OpenSSH sshd. In the other container is a custom, Paramiko-based ssh server that has been "Zitified" with our brand new `python-sdk-py` (PyPi `openziti`). Importantly, these SSH server containers **don't listen on any public interface, don't have any special Linux capabilities, and have NO ports mapped to them**.
 
 The only way to reach the SSH servers is via the OpenZiti App Network we'll create.
 
