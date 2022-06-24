@@ -8,9 +8,7 @@ Ansible is widely deployed and likely used within your organization. Most deploy
 
 Enter ParamikoZ, Python SSH with built-in OpenZiti!
 
-> If we cannot pass over the mountain, let us go under it
-
-*Gimli, son of Gloin*
+> *If we cannot pass over the mountain, let us go under it* -Gimli, son of Gloin
 
 ## The Bird's Eye View
 
