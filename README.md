@@ -44,8 +44,8 @@ pip install --user -r requirements.txt
 ```
 **Whoah, whoah there buddy...that's a lot stuff. "Zero Trust" you say, well why don't we talk about what are we doing here for a second?**
 
-Objective:
-----------
+Our Objective:
+--------------
 Before going any further, be aware this explainer is accompanied by a `setup.sh` script and video that will step through doing all. Still, it's important to get some footing before jumping off the deep end.
 
 We are going to deploy some non-privileged SSH servers locally, sandboxed away in containers. One of them, will be behind our `ziti-edge-tunnel` software container in a shared network. The other is a custom, paramiko based ssh server that has been "zitified" with our brand new `python-sdk-py`. Importantly, these containers **don't listen on any public interface, don't have any special Capabilities, and have NO ports mapped to them**. You yourself should not be able to reach them at any port from your host. 
@@ -58,7 +58,21 @@ Finally, we want to do some work with Ansible. That's were our ParamikoZ connect
 
 Into the Wild:
 ============
+Let's get familiar with ZEDS. 
 
+The video below steps through the UI to show you how this is done. **It is important that you follow the naming conventions shown in the video verbatim, as we will rely on them in the `setup.sh` script**
+
+We're going to create two ZEDS "apps". For our pursposes here, you can think of "apps" as independent OpenZiti overlay networks. ZEDS does the heavy lifting for you, taking away the need to set up your own network.
+ 
+For each of these apps, we will provision a client identity and a server identity, each one being a JWT token. The client identity will be used for the Ansible paramikoz plugin, and the server identity will be used for the ziti component of the ssh server running in the container.
+
+Then we will create a service definition for each app. These service definitions provide the Ansible hostnames, via a config type called `intercept.v1`, which provides a hostname resolution mechanism for the ParamikoZ plugin.
+
+The `ssh-service-zet` (**z**iti-**e**dge-**t**unnel) will also have a `host.v1` configuration, which the tunnel will use to off-board data from the overlay network. The `ssh-service-sdk` does not need this because the overlay terminates **directly** in the code.
+
+As you step through the video, feel free to use the copy bottons below on the json configs to save you from typing, and to ensure a consistent experience.
+
+[video]
 
 ssh-service-zet:
 ----------------
@@ -110,13 +124,25 @@ intercept.v1
 }
 ```
 
+Showtime:
+---------
+
+If you've followed the steps in the videos, you should now have 4 JWT tokens in your downloads folder.
+
+* ssh_client_{1,2}.jwt
+* ssh_server_{1,2}.jwt
+
+You should also have copied the fully qualified service name of the `ssh-service-sdk` service into your clipboard. 
+
+Before running the `setup.sh`, please follow these steps:
+
 ```bash
 # Copy your newly minted JWT tokens into the expected location
 cp ~/Downloads/ssh_{client,server}_?.jwt secrets/tokens/
 ```
 ```bash
 # Export your SDK app service name
-export ZITI_SDK_SERVICE="[my_app_name] [my_service_name] [my_base64_string]
+export ZITI_SDK_SERVICE="[my_app_name] ssh-service-sdk [my_base64_string]"
 ```
 ```bash
 # Run setup.sh script to:
@@ -126,6 +152,11 @@ export ZITI_SDK_SERVICE="[my_app_name] [my_service_name] [my_base64_string]
 # 4) Start the docker-compose stack
 ./setup.sh
 ```
+
+The Payoff:
+-----------
+You've made it here. Congratulations! Welcome to Zero Trust Ansible. Step forward and claim your prize. 
+
 ```bash
 # List your inventory hosts
 ansible "all" --list
@@ -135,6 +166,24 @@ ansible "all" --list
 # provided by ZEDS
 ansible "all" -m ping
 ```
+
+
+**This should look indestinguishable from any other ansible run**. So, what's going on here? 
+
+```bash
+ansible "all" --extra-vars 'ziti_log_level=3' -m ping
+```
+
+You should now see a bunch of debug information written to stdout by the `ziti-python-sdk`. 
+
+So, what's going on here? 
+
+The Prestige:
+-------------
+
+Each time a connection is made to the defined `intercept.v1` addresses, the `ParamikoZ` connection plugin rewrites the request at runtime, and sends it on it's way over the overlay. You are accessing your remote SSH servers **over** OpenZiti. Remember, there are *no ports* open on the containers; they are sandboxed away and you can't reach them yourself over your local network.
+
+ The ziti components in those containers are establishing duplexed connections outbound to the ziti network.  
 
 ```bash
 # Let's prove one of these is not like the other ;)
