@@ -190,7 +190,7 @@ So, what's going on here?
 
 ### The Prestige
 
-Each time a connection is made to the defined `intercept.v1` addresses, the `ParamikoZ` connection plugin rewrites the request at runtime, and sends it on it's way over the overlay. You are accessing your remote SSH servers **over** OpenZiti. Remember, there are *no ports* open on the containers; they are sandboxed away and you can't reach them yourself over your local network.
+Each time a connection is made to the defined `intercept.v1` addresses, the `ParamikoZ` connection plugin rewrites the request at runtime, and sends it on it's way to the OpenZiti Network overlay. You are accessing your remote SSH servers **over** OpenZiti. Remember, there are *no ports* open on the containers as they are sandboxed away and you can't reach them yourself over your local network.
 
  The OpenZiti components in those containers are establishing duplexed connections outbound to the OpenZiti Network.  
 
