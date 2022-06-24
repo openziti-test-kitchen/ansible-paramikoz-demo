@@ -6,36 +6,36 @@ Seeing is believing, but feeling is the truth. Sometimes, you must touch it to g
 
 More practically, because Ansible is widely deployed and probably used within your organization. Most deployments (not yours, of course) are insecure. More often than not, we defend our precious SSHD servers by limiting their use to the walled garden of the firewall, where the server can listen on its port happily, though perhaps naively. Sadly, sometimes we see this scenario when the host is exposed to the WAN, often relying solely on the security of cryptography to protect them. To make matters worse, many deployments leverage a service user with shared credentials per environment. Sometimes, they invoke Ansible from a centralized server, and sometimes that user has password-less sudo.
 
- High-performing organizations can do better by forcing administrators to act in the context of their organizational user, with appropriate credentials. But even this approach is limited to the trust domain of the network. Managing things at the edge still poses a challenge, and SSH is often a non-starter for managing globally distributed and vendored services, where SSH connection cannot be reliably established, if at all.
+ High-performing organizations can go farther by requiring administrators to act in the context of their organizational user, with appropriate credentials. Even that level of diligence is limited to the trust domain of the network. Managing things at the logical edge poses ongoing challenges. For example, SSH is not always a viable transport candidate for managing distributed and vendored services because of the complex orchestration necessary to align the SSH server with layers of infrastructure like firewalls, DDOS mitigation, and fail2ban.
 
 Enter ParamikoZ, Python SSH with built-in OpenZiti!
 
-"If we cannot pass over the mountain, let us go under it" - Gimli son of Gloin
+> If we cannot pass over the mountain, let us go under it
+
+*Gimli, son of Gloin*
 
 ## The Bird's Eye View
 
-So, we are basically going to make this:
-
 ![Zerto Trust Ansible](diagrams/zero_trust_ansible.png)
 
-What is this you ask?
+What is this, you ask?
 
 1) An Ansible client
-2) A couple of  Ziti Edge Developer Sandbox (ZEDS) apps
-3) A docker-compose stack of a couple of SSH server services
+2) A pair of Ziti Edge Developer Sandbox (ZEDS) apps
+3) A docker-compose stack of a pair of SSH servers, one for each of the aforementioned apps
 
-That means, we need...
+Now let's gather some supplies for this brief journey...
 
 ### Requirements
 
 1. Python
 1. OpenZiti Python SDK
 1. Docker Engine (or Podman Socket)
-    * Player'ss choice on rootful vs rootless, both work
+    * Player's choice on rootful vs rootless, both work
 1. docker-compose (or podman-compose integration)
 1. Ansible CLI
 
-There is a `requirements.txt` file at the root of the project. It will install `ansible` and the `openziti` PyPI module.
+There is a `requirements.txt` file at the root of the project. It will install `ansible` and the `openziti` PyPI modules.
 
 ```bash
 # You can use virtualenv or venv, player's choice
@@ -46,15 +46,15 @@ pip install --user -r requirements.txt
 
 ## Our Objective
 
-Before going any further, be aware this explainer is accompanied by a `setup.sh` script and video that will step through doing all. Still, it's important to get some footing before jumping off the deep end.
+Before going any further, be aware this explainer is accompanied by a `setup.sh` script and video that will step through the procedure. Still, it's important to get some footing before jumping off the deep end.
 
-We are going to deploy some non-privileged SSH servers locally, sandboxed away in containers. One of them, will be behind our `ziti-edge-tunnel` software container in a shared network. The other is a custom, paramiko based ssh server that has been "zitified" with our brand new `python-sdk-py`. Importantly, these containers **don't listen on any public interface, don't have any special Capabilities, and have NO ports mapped to them**. You yourself should not be able to reach them at any port from your host.
+We are going to deploy some non-privileged SSH servers locally, sandboxed away in containers. One of them, will be behind our `ziti-edge-tunnel` software container in a shared network. This tunneller will act as an agent for the vanilla OpenSSH sshd. In the other container is a custom, Paramiko-based ssh server that has been "zitified" with our brand new `python-sdk-py` (PyPi `openziti`). Importantly, these SSH server containers **don't listen on any public interface, don't have any special Linux Capabilities (permissions), and have NO ports mapped to them**. 
 
-With OpenZiti, *we'll still be able to reach them*.
+The only way to reach the SSH servers is via the OpenZiti App Network we'll create.
 
-But, only after setting up an OpenZiti Overlay Network. For that, we're going to use the Ziti Enterprise Developer Sandbox (ZEDS). It allows us to set up OpenZiti networks for development purposes, without having to worry about all the underlying ziti components (like the ziti-controller, ziti-router(s), policies, etc...). Don't worry, we're gonna show you how, and give you everything you need below via a short video and some configs you can copy and paste.
+For that, we're going to use the Ziti Edge Developer Sandbox (ZEDS). It allows us to set up OpenZiti networks for development purposes like this demo, but without having to worry about all the underlying ziti components (like the ziti-controller, ziti-router(s), policies, etc...). Don't worry, we'll show you how and give you everything you need below via a short video and some configs you can copy and paste.
 
-Finally, we want to do some work with Ansible. That's were our ParamikoZ connection plugin comes in. Right now, it's less that 60 LOC; yet, it's fully integrated to Ansible's configuration hooks, and allows you to connect (using a ziti identity) to your services. Using this plugin, we supercharge Ansible, by conferring it he powers to find the ZEDS defined service intercept addresses, which are only reachable via the OpenZiti overlay, and which will be hosted on those dark containers. Lastly, we have some eastereggs, so stick around.
+Finally, we want to do some work with Ansible. That's were our ParamikoZ connection plugin comes in. Right now, it's less than 60 LOC; yet, fully integrated with Ansible's configuration hooks, and allows you to connect (using a ziti identity) to your services. Using this plugin, we supercharge Ansible, by conferring it he powers to find the ZEDS defined service intercept addresses, which are only reachable via the OpenZiti overlay, and which will be hosted on those dark containers. Lastly, we have some eastereggs, so stick around.
 
 ## Into the Wild
 
