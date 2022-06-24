@@ -1,12 +1,10 @@
 # Zero Trust Ansible Demo
 
-But...why?
+Why should I do this demo?
 
-Seeing is believing, but feeling is the truth. Sometimes, you must touch it to get a sense of the thing.
+Ansible is widely deployed and likely used within your organization. Most deployments (not yours, of course) are insecure. More often than not, we defend our precious SSHD servers by limiting their use to the walled garden of the firewall, where the server can listen on its port happily if not naively. Sadly, sometimes we see this scenario when the host is publicly exposed, often relying completely on a single layer of security e.g. a password or key pair. To make matters worse, many deployments leverage a service user with shared credentials per environment. Sometimes, they invoke Ansible from a centralized server, and sometimes that user has password-less sudo. What could possibly go wrong?
 
-More practically, because Ansible is widely deployed and probably used within your organization. Most deployments (not yours, of course) are insecure. More often than not, we defend our precious SSHD servers by limiting their use to the walled garden of the firewall, where the server can listen on its port happily, though perhaps naively. Sadly, sometimes we see this scenario when the host is exposed to the WAN, often relying solely on the security of cryptography to protect them. To make matters worse, many deployments leverage a service user with shared credentials per environment. Sometimes, they invoke Ansible from a centralized server, and sometimes that user has password-less sudo.
-
- High-performing organizations can go farther by requiring administrators to act in the context of their organizational user, with appropriate credentials. Even that level of diligence is limited to the trust domain of the network. Managing things at the logical edge poses ongoing challenges. For example, SSH is not always a viable transport candidate for managing distributed and vendored services because of the complex orchestration necessary to align the SSH server with layers of infrastructure like firewalls, DDOS mitigation, and fail2ban.
+ High-performing organizations can go farther by requiring administrators to act in the context of their organizational user with credentials that hold the least necessary privilege for each task. Even that level of diligence is limited to the trust domain of the network. Managing things at the logical edge poses additional ongoing challenges. For example, SSH is not always a viable transport candidate for managing distributed and vendored services because of the complex orchestration necessary to align the SSH server with layers of infrastructure like firewalls, DDOS mitigation, and fail2ban.
 
 Enter ParamikoZ, Python SSH with built-in OpenZiti!
 
