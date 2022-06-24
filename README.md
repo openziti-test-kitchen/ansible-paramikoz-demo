@@ -44,7 +44,7 @@ pip install --user -r requirements.txt
 
 **Whoah, whoah there buddy...that's a lot stuff. "Zero Trust" you say, well why don't we talk about what are we doing here for a second?**
 
-### Our Objective
+## Our Objective
 
 Before going any further, be aware this explainer is accompanied by a `setup.sh` script and video that will step through doing all. Still, it's important to get some footing before jumping off the deep end.
 
@@ -126,7 +126,7 @@ intercept.v1
 }
 ```
 
-### Showtime
+## Showtime
 
 If you've followed the steps in the videos, you should now have 4 JWT tokens in your downloads folder.
 
