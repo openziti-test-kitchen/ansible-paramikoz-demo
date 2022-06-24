@@ -174,7 +174,14 @@ ansible "all" -m ping
 ansible "all" --extra-vars 'ziti_log_level=3' -m ping
 ```
 
+
 You should now see a bunch of debug information written to stdout by the `ziti-python-sdk`. 
+
+Let's try something more taxing. Does this work for you? 
+
+```bash
+ansible "all" -m setup
+```
 
 So, what's going on here? 
 
@@ -185,6 +192,8 @@ Each time a connection is made to the defined `intercept.v1` addresses, the `Par
 
  The ziti components in those containers are establishing duplexed connections outbound to the ziti network.  
 
+If you provide your own server using one of our SDKs, you can also do some more fun things:
+
 ```bash
 # Let's prove one of these is not like the other ;)
 # ansibletarget1.ziti should fail
@@ -192,9 +201,9 @@ Each time a connection is made to the defined `intercept.v1` addresses, the `Par
 ansible "all" -m raw -a "ziggywave"
 ```
 
-```bash
-ansible "all" -m setup
-```
+The end:
+
+All good things do come to an end. When you're ready, just run:
 
 ```bash
 # Clean up containers
