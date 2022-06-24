@@ -56,7 +56,7 @@ The only way to reach the SSH servers is via the OpenZiti App Network we'll crea
 
 For that, we're going to use the Ziti Edge Developer Sandbox (ZEDS). It allows us to set up OpenZiti networks for development purposes like this demo, but without having to worry about all the underlying OpenZiti components (like the `ziti-controller`, `ziti-router`, service policies, etc.). Don't worry, we'll show you how and give you everything you need below via a short video and some configs you can copy and paste.
 
-Finally, we want to do some work with Ansible. That's where our ParamikoZ connection plugin comes in which happens to be less than 60 LOC, is fully integrated with Ansible's configuration hooks, and allows you to connect with an OpenZiti Identity to your Compose services, the SSH servers. This connection plugin supercharges Ansible by conferring the power to find an OpenZiti Service by matching the inventory hostname to a configured service address. Lastly, we have some easter eggs.
+Finally, we want to do some work with Ansible. That's where our ParamikoZ connection plugin comes in which happens to be less than 60 LOC, is fully integrated with Ansible's configuration hooks, and allows you to connect with an OpenZiti Identity to your Compose services, the SSH servers. This connection plugin supercharges Ansible by conferring the power to find an OpenZiti Service by matching the inventory hostname to a configured service address. Lastly, we have some eastereggs.
 
 ## Into the Wild
 
