@@ -12,7 +12,7 @@ Ansible is widely deployed and likely used within your organization. Most deploy
 
 How can we do even better?
 
-Enter ParamikoZ, Python SSH with built-in OpenZiti!
+Enter ParamikoZ, a Python SSH plugin for Ansible with built-in OpenZiti!
 
 > *If we cannot pass over the mountain, let us go under it* -Gimli, son of Gloin
 
@@ -22,7 +22,7 @@ Enter ParamikoZ, Python SSH with built-in OpenZiti!
 
 What is this, you ask?
 
-1. An Ansible client
+1. An Ansible client, using the ParamikoZ connection plugin.
 2. A pair of Ziti Edge Developer Sandbox (ZEDS) apps
 3. A corresponding pair of SSH servers running in Docker
 
