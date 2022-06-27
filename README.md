@@ -226,3 +226,20 @@ All good things do come to an end. When you're ready, just run:
 # Clean up containers
 docker-compose down
 ```
+
+## Troubleshooting
+
+### Pip Notes
+
+If you're having issues with pip installation, please make sure to upgrade `pip` itself before installing project requirements:
+```bash
+python -m pip install --upgrade pip
+```
+
+### WSL Notes
+
+Because `bash` expects unix style line separators, you may need to configure git to disable `core.autocrlf`:
+
+```bash
+git config --local core.autocrlf false
+```
