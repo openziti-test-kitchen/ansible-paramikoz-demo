@@ -229,14 +229,14 @@ docker-compose down
 
 ## Troubleshooting
 
-### Pip Notes
+### pip
 
-If you're having issues with pip installation, please make sure to upgrade `pip` itself before installing project requirements:
+If you're having issues with `pip` installation, please make sure to upgrade `pip` itself before installing project requirements:
 ```bash
 python -m pip install --upgrade pip
 ```
 
-### WSL Notes
+### Windows WSL
 
 Because `bash` expects unix style line separators, you may need to configure git to disable `core.autocrlf`:
 
