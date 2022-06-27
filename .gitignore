@@ -1,4 +1,5 @@
 __pycache__/
+ansible_collections/
 secrets/identities/*
 !secrets/identities/.gitkeep
 secrets/ssh/*

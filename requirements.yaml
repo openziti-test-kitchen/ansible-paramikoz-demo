@@ -1,0 +1,6 @@
+---
+collections:
+  - name: community.openziti
+    source: https://github.com/openziti-test-kitchen/ansible-collection.git
+    type: git
+...

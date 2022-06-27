@@ -30,7 +30,7 @@ Now let's gather some supplies for this brief journey...
 
 ### Requirements
 
-1. Python
+1. Python 3
 2. OpenZiti Python SDK
 3. Docker Engine
     * Alternatively, a Podman Socket
@@ -43,6 +43,12 @@ There is a `requirements.txt` file at the root of the project. It will install `
 ```bash
 # You can use virtualenv or venv, player's choice
 pip install --user -r requirements.txt
+```
+
+Also, you will need to install the Ansible collection that provides the plugin:
+
+```bash
+ansible-galaxy collection install -r requirements.yaml
 ```
 
 **Whoah, whoah there buddy...that's a lot stuff. "Zero Trust" you say, well why don't we talk about what are we doing here for a second?**
