@@ -28,9 +28,22 @@ RUN python -m pip install --no-cache-dir --user -r requirements.txt
 
 COPY ${DOCKER_BUILD_DIR}/src/ .
 
-COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/ssh/ziggy_id_rsa.pub /home/${SSHD_USER}/.ssh/authorized_keys
-COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/ssh/ziggy_id_rsa /home/${SSHD_USER}/.ssh/id_rsa
-COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/sshd/host_key_file.key .
-COPY --chmod=600 --chown=${SSHD_USER}:${SSHD_USER} secrets/identities/ssh_server_2.json .
+COPY secrets/ssh/ziggy_id_rsa.pub /home/${SSHD_USER}/.ssh/authorized_keys
+COPY secrets/ssh/ziggy_id_rsa /home/${SSHD_USER}/.ssh/id_rsa
+COPY secrets/sshd/host_key_file.key .
+COPY secrets/identities/ssh_server_2.json .
+
+USER root
+
+RUN chmod 600 /home/${SSHD_USER}/.ssh/authorized_keys \
+    && chown ${SSHD_USER}:${SSHD_USER} /home/${SSHD_USER}/.ssh/authorized_keys \
+    && chmod 600 /home/${SSHD_USER}/.ssh/id_rsa \
+    && chown ${SSHD_USER}:${SSHD_USER} /home/${SSHD_USER}/.ssh/id_rsa \
+    && chmod 600 ./host_key_file.key \
+    && chown ${SSHD_USER}:${SSHD_USER} ./host_key_file.key \
+    && chmod 600 ./ssh_server_2.json \
+    && chown ${SSHD_USER}:${SSHD_USER} ./ssh_server_2.json
+
+USER $SSHD_USER
 
 CMD ["/bin/bash", "-c", "exec python paramikoz_sshd.py -k ${SSHD_HOST_KEY_FILE} -l ${SSHD_LOG_LEVEL} -i ${ZITI_IDENTITY_FILE} -s \"${ZITI_SDK_SERVICE}\""]
