@@ -83,7 +83,7 @@ for jwt in "${REQUIRED_JWTS[@]}"; do
     fi
 done
 
-DOCKER_BUILDKIT=1 docker-compose build --parallel --force-rm --no-cache || exit 1
+docker-compose build --parallel --force-rm --no-cache || exit 1
 docker-compose up -d || exit 1
 
 popd &> /dev/null || exit 1
