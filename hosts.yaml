@@ -8,7 +8,7 @@ ssh_servers:
       ziti_identities:
         - ./secrets/identities/ssh_client_2.json
   vars:
-    ansible_connection: community.openziti.paramikoz
+    ansible_connection: community.openziti.paramiko
     ansible_user: ziggy
     ansible_ssh_private_key_file: ./secrets/ssh/ziggy_id_rsa
 ...
