@@ -7,7 +7,7 @@ import threading
 from binascii import hexlify
 
 import paramiko
-from paramiko.py3compat import u
+from paramiko.util import u
 from sftpserver.stub_sftp import StubSFTPServer
 
 from decorators import cls_func_wrapper, func_wrapper

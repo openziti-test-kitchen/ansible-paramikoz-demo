@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: build/ssh-service-zet/Dockerfile
-      args:
-        TUNNEL_VERSION: nomount
     image: ssh-service-zet:dev
     privileged: false
     restart: unless-stopped
